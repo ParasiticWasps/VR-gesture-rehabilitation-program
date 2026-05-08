@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class FHPEvent : MonoBehaviour, ITriggerEvent
 {
+    private const string AUDIO_PATH = "Sound/FHPWarning";
+
+    private AudioClip _currClip;
+
     public void OnEvent(Action callback)
     {
         StartCoroutine(OnEventCoroutine(callback));
@@ -11,6 +15,11 @@ public class FHPEvent : MonoBehaviour, ITriggerEvent
 
     private IEnumerator OnEventCoroutine(Action callback)
     {
+        // 播放警告音频
+        if (_currClip == null) _currClip = AudioManager.Get().Play(AUDIO_PATH);
+        else AudioManager.Get().Play(_currClip);
+
+        // 显示警告文本提示
         UIManager.Get().SetWarningText("警告！身体过度前倾！");
 
         yield return new WaitForSeconds(2.0f);

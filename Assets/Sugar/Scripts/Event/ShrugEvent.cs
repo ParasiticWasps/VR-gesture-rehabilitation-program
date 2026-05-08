@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class ShrugEvent : MonoBehaviour, ITriggerEvent
 {
+    private const string AUDIO_PATH = "Sound/ShrugWarning";
+
+    private AudioClip _currClip;
+
     public void OnEvent(Action callback)
     {
         StartCoroutine(OnEventCoroutine(callback));
@@ -11,7 +15,12 @@ public class ShrugEvent : MonoBehaviour, ITriggerEvent
 
     private IEnumerator OnEventCoroutine(Action callback)
     {
-        UIManager.Get().SetWarningText("警告！过度耸肩警告！");
+        // 播放警告音频
+        if (_currClip == null) _currClip = AudioManager.Get().Play(AUDIO_PATH);
+        else AudioManager.Get().Play(_currClip);
+
+        // 显示警告文本提示
+        UIManager.Get().SetWarningText("警告！已过度耸肩！");
 
         yield return new WaitForSeconds(2.0f);
 

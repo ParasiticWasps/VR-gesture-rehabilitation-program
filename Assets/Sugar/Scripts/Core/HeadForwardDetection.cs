@@ -47,11 +47,11 @@ public class HeadForwardDetection : MonoBehaviour
         {
             // 计算相对于初始位置的偏移量
             Vector3 delta = currentPos - initialHeadLocalPosition;
-            currentForwardDistance = delta.z * 100.0f; // Unity中，前向通常是Z轴
-            UIManager.Get().SetForwardDistanceText(currentForwardDistance.ToString("F0"));
-            if (currentForwardDistance > maxForwardDistance)
+            currentForwardDistance = delta.z * 100.0f;
+            UIManager.Get().SetForwardDistanceText(Mathf.Abs(currentForwardDistance).ToString("F0"));
+
+            if (currentForwardDistance > maxForwardDistance || currentForwardDistance < (maxForwardDistance * -1.0f))
             {
-                // 在这里触发你的逻辑，例如提醒玩家
                 EventTriggerManager.Get().EventTrigger(EventTriggerManager.TriggerEventType.ForwardHeadPosture);
             }
         }
