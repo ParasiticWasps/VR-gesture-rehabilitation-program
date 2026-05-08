@@ -1,6 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public class EventTriggerManager : MonoBehaviour
@@ -25,21 +22,22 @@ public class EventTriggerManager : MonoBehaviour
     {
         if (_isCooling == true) return;
 
+        _isCooling = true;
         _currTriggerEvent = type;
         ITriggerEvent trigger;
         switch (type)
         {
             case TriggerEventType.ForwardHeadPosture:
                 trigger = TryGetTriggerEvent<FHPEvent>();
-                trigger.OnEvent(() => _isCooling = true);
+                trigger.OnEvent(() => _isCooling = false);
                 break;
             case TriggerEventType.HeadYawDeviation:
                 trigger = TryGetTriggerEvent<HYDEvent>();
-                trigger.OnEvent(() => _isCooling = true);
+                trigger.OnEvent(() => _isCooling = false);
                 break;
             case TriggerEventType.Shrug:
                 trigger = TryGetTriggerEvent<ShrugEvent>();
-                trigger.OnEvent(() => _isCooling = true);
+                trigger.OnEvent(() => _isCooling = false);
                 break;
         }
     }

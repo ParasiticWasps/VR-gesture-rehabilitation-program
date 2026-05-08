@@ -21,6 +21,9 @@ public class UIManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _shrugDistanceText;
     [SerializeField] private Text _warningText;
 
+    [Header("Log")]
+    [SerializeField] private Text _logText;
+
     public void SetText(TextMeshProUGUI t, string mess)
     {
         t.text = mess;
@@ -45,6 +48,11 @@ public class UIManager : MonoBehaviour
     public void SetShrugDistanceText(string mess)
     {
         SetText(_shrugDistanceText, mess);
+    }
+
+    public void AddLogTextContent(string t)
+    {
+        _logText.text = t;
     }
 
     public void SetWarningText(string warning)

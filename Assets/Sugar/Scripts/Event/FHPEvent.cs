@@ -11,7 +11,7 @@ public class FHPEvent : MonoBehaviour, ITriggerEvent
 
     private IEnumerator OnEventCoroutine(Action callback)
     {
-        UIManager.Get().SetWarningText("警告！身体前倾！");
+        UIManager.Get().SetWarningText("警告！身体过度前倾！");
 
         yield return new WaitForSeconds(2.0f);
 

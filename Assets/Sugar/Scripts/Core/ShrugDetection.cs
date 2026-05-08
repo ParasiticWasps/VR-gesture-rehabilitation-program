@@ -1,4 +1,6 @@
+using Unity.XR.PXR;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 using UnityEngine.XR;
 
 public class ShrugDetection : MonoBehaviour
@@ -11,52 +13,52 @@ public class ShrugDetection : MonoBehaviour
         return _instance;
     }
 
-    [Tooltip("手高于头部的垂直阈值（米），默认3厘米")]
-    public float maxHeightDifference = 0.03f;
+    [Tooltip("允许手高于头部的最大垂直距离（CM）")]
+    public float maxHeightDifference = 3f;
 
-    [Tooltip("当前手超过头部的最大垂直高度（厘米）")]
-    public float currentMaxHandAboveHead { get; private set; } = 0f;
+    [Tooltip("从这里拖入左手模型/空节点")]
+    public Transform leftHand;
+
+    [Tooltip("从这里拖入右手模型/空节点")]
+    public Transform rightHand;
+
+    public Transform head;
+
+    private float _leftDifference = 0f;
+    private float _rightDifference = 0f;
 
     void Update()
     {
-        // 获取头部位置
-        var headDevice = InputDevices.GetDeviceAtXRNode(XRNode.Head);
-        if (!headDevice.TryGetFeatureValue(CommonUsages.centerEyePosition, out Vector3 headPos))
-            return; // 头部追踪不可用则跳过
+        // 1. 获取头部世界位置
+        //var headDevice = InputDevices.GetDeviceAtXRNode(XRNode.Head);
+        //if (!headDevice.TryGetFeatureValue(CommonUsages.centerEyePosition, out Vector3 headPos))
+        //    return;
 
-        float maxAbove = 0f;
-        bool handAbove = false;
+        bool triggered = false;
 
-        // 检测左手
-        CheckHand(XRNode.LeftHand, headPos, ref maxAbove, ref handAbove);
-        // 检测右手
-        CheckHand(XRNode.RightHand, headPos, ref maxAbove, ref handAbove);
-
-        // 转换为厘米
-        currentMaxHandAboveHead = maxAbove * 100f;
-
-        // 显示在UI上（可选）
-        if (UIManager.Get() != null)
-            UIManager.Get().SetShrugDistanceText(currentMaxHandAboveHead.ToString("F0"));
-
-        if (handAbove)
+        // 2. 检查左右手是否高于头部
+        if (leftHand != null)
         {
-            // 触发手过高事件
+            _leftDifference = (leftHand.position.y - head.position.y) * 100.0f;
+            triggered |= _leftDifference > maxHeightDifference;
+        }
+
+        if (rightHand != null)
+        {
+            _rightDifference = (rightHand.position.y - head.position.y) * 100.0f;
+            triggered |= _rightDifference > maxHeightDifference;
+        }
+
+        //UIManager.Get().AddLogTextContent($"h: {head.position.y.ToString("F2")}, r: {rightHand.position.y.ToString("F2")}, d:{_rightDifference.ToString("F2")}");
+
+        float _maxYDifference  = Mathf.Max(_leftDifference, _rightDifference);
+        _leftDifference  = 0f;
+        _rightDifference = 0f;
+
+        UIManager.Get().SetShrugDistanceText(_maxYDifference.ToString("F0"));
+
+        // 3. 触发事件
+        if (triggered)
             EventTriggerManager.Get()?.EventTrigger(EventTriggerManager.TriggerEventType.Shrug);
-        }
-    }
-
-    private void CheckHand(XRNode handNode, Vector3 headPos, ref float maxAbove, ref bool triggered)
-    {
-        var handDevice = InputDevices.GetDeviceAtXRNode(handNode);
-        if (handDevice.TryGetFeatureValue(CommonUsages.devicePosition, out Vector3 handPos))
-        {
-            float diff = handPos.y - headPos.y;
-            if (diff > maxAbove)
-                maxAbove = diff;
-
-            if (diff > maxHeightDifference)
-                triggered = true;
-        }
     }
 }

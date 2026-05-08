@@ -11,7 +11,7 @@ public class HYDEvent : MonoBehaviour, ITriggerEvent
 
     private IEnumerator OnEventCoroutine(Action callback)
     {
-        UIManager.Get().SetWarningText("警告！躯干旋转！");
+        UIManager.Get().SetWarningText("警告！躯干过度旋转！");
 
         yield return new WaitForSeconds(2.0f);
 
