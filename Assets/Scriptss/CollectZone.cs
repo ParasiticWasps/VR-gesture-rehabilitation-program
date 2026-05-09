@@ -6,7 +6,7 @@ using TMPro;
 public class CollectZone : MonoBehaviour
 {
     [Header("生成配置")]
-    public GameObject prefab;           // 交互物体Prefab
+    public List<GameObject> prefabs = new List<GameObject>();           // 交互物体Prefab
     public Transform spawnCenter;       // 生成中心点
     public float spawnRadius = 1f;      // 随机范围半径
     public float spawnHeight = 1f;      // 生成高度
@@ -58,8 +58,8 @@ public class CollectZone : MonoBehaviour
     {
         Vector2 randomCircle = Random.insideUnitCircle * spawnRadius;
         Vector3 spawnPos = spawnCenter.position + new Vector3(randomCircle.x, spawnHeight, randomCircle.y);
-
-        var obj = Instantiate(prefab, spawnPos, Quaternion.identity);
+        GameObject randPrefab = prefabs[GetRandomIndex(prefabs)];
+        var obj = Instantiate(randPrefab, spawnPos, Quaternion.identity);
         activeObjects.Add(obj);
         RegisterGrabEvents(obj);
     }
@@ -139,6 +139,16 @@ public class CollectZone : MonoBehaviour
     {
         if (scoreText != null)
             scoreText.text = $"Score: {score}";
+    }
+
+    private int GetRandomIndex<T>(List<T> list)
+    {
+        if (list == null || list.Count == 0)
+        {
+            Debug.LogError("列表为空，无法获取随机索引");
+            return -1;
+        }
+        return Random.Range(0, list.Count);
     }
 
     private void OnDrawGizmosSelected()
