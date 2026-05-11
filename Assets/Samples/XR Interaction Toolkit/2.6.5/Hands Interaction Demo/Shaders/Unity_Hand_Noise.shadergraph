@@ -2592,8 +2592,8 @@
     "m_ObjectId": "aff23e113c9b4ed393c693fa57a3ae64",
     "m_Title": "Wrist Fade Out",
     "m_Position": {
-        "x": -310.0,
-        "y": 673.0
+        "x": -309.99993896484377,
+        "y": 672.9999389648438
     }
 }
 
@@ -3599,7 +3599,7 @@
     "m_ObjectId": "ffb174ea9d7047918eb030b981e7ca06",
     "m_Title": "Finger Highlights",
     "m_Position": {
-        "x": -579.0,
+        "x": -578.9999389648438,
         "y": -427.0
     }
 }

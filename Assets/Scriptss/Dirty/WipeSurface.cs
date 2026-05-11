@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -22,6 +23,8 @@ public class WipeSurface : MonoBehaviour
 
     private Material material;
     private Dictionary<Transform, Vector3> lastPositions = new();
+
+    public Action<float> OnWipe;
 
     private void Start()
     {
@@ -55,6 +58,7 @@ public class WipeSurface : MonoBehaviour
 
         currentDirtAmount = Mathf.Max(0f, currentDirtAmount - wipeAmount);
         material.SetFloat("_DirtAmount", currentDirtAmount);
+        OnWipe?.Invoke(currentDirtAmount - wipeAmount);
     }
 
     private void OnCollisionExit(Collision collision)
