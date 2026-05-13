@@ -8,6 +8,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/DevDen Arch Viz Scotland/Scenes/ArchViz.unity
     guid: 5d9a04077777e2741aa75a554f7ee3fb
+  - enabled: 1
+    path: Assets/1.unity
+    guid: 8678daa0a84a96e4f9595c86c28086de
   m_configObjects:
     Unity.XR.Oculus.Settings: {fileID: 11400000, guid: 2abe7b602698d8c4cb370da78848f40c, type: 2}
     Unity.XR.PICO.LivePreview.Settings: {fileID: 11400000, guid: 0164b1cac54c8994db4284ace6d98436, type: 2}

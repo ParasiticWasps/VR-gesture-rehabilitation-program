@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 [RequireComponent(typeof(AudioSource))]
 public class AudioManager : MonoBehaviour
@@ -8,8 +9,7 @@ public class AudioManager : MonoBehaviour
     public static AudioManager Get()
     {
         if (_instance == null)
-            _instance = GameObject.FindAnyObjectByType<AudioManager>();
-
+            _instance = FindAnyObjectByType<AudioManager>();
         return _instance;
     }
 
@@ -20,7 +20,7 @@ public class AudioManager : MonoBehaviour
         _audioSource = gameObject.GetComponent<AudioSource>();
         if (_audioSource == null) _audioSource = gameObject.AddComponent<AudioSource>();
         _audioSource.playOnAwake = false;
-        _audioSource.loop        = false;
+        _audioSource.loop = false;
     }
 
     public AudioClip Play(string path)
@@ -47,6 +47,12 @@ public class AudioManager : MonoBehaviour
     {
         _audioSource.Stop();
         _audioSource.clip = null;
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
+            SceneManager.LoadSceneAsync(1, LoadSceneMode.Single);
     }
 
     public AudioClip TryLoadAudioClip(string path) => Resources.Load<AudioClip>(path);
